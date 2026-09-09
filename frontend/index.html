@@ -1,0 +1,2604 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Smart City Complaint Portal</title>
+
+
+<style>
+
+/* =====================================================
+   GLOBAL
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+
+    font-family: Arial, sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0f172a,
+            #1e293b
+        );
+
+    color: white;
+
+    min-height: 100vh;
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+
+    background:
+        rgba(15, 23, 42, 0.95);
+
+    padding: 18px 30px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    border-bottom:
+        1px solid #334155;
+
+}
+
+
+header h1 {
+
+    font-size: 24px;
+
+}
+
+
+.nav-buttons button {
+
+    padding: 10px 18px;
+
+    margin-left: 8px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+.citizen-btn {
+
+    background: #38bdf8;
+
+    color: #0f172a;
+
+}
+
+
+.admin-btn {
+
+    background: #818cf8;
+
+    color: white;
+
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.container {
+
+    max-width: 1200px;
+
+    margin: auto;
+
+    padding: 40px 20px;
+
+}
+
+
+/* =====================================================
+   CITIZEN
+===================================================== */
+
+#citizenPage {
+
+    max-width: 650px;
+
+    margin: auto;
+
+}
+
+
+.hero {
+
+    text-align: center;
+
+    margin-bottom: 35px;
+
+}
+
+
+.hero h2 {
+
+    font-size: 38px;
+
+    margin-bottom: 10px;
+
+}
+
+
+.hero p {
+
+    color: #cbd5e1;
+
+}
+
+
+.card {
+
+    background:
+        rgba(30, 41, 59, 0.95);
+
+    padding: 30px;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.3);
+
+}
+
+
+label {
+
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-weight: bold;
+
+}
+
+
+input[type="text"],
+input[type="password"],
+input[type="file"] {
+
+    width: 100%;
+
+    padding: 13px;
+
+    margin-bottom: 20px;
+
+    border-radius: 8px;
+
+    border:
+        1px solid #475569;
+
+    background: #0f172a;
+
+    color: white;
+
+}
+
+
+.submit-btn {
+
+    width: 100%;
+
+    padding: 14px;
+
+    background: #22c55e;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.submit-btn:hover {
+
+    background: #16a34a;
+
+}
+
+
+.message {
+
+    margin-top: 20px;
+
+    padding: 14px;
+
+    border-radius: 8px;
+
+    display: none;
+
+}
+
+
+.success {
+
+    background:
+        rgba(34,197,94,0.2);
+
+    border:
+        1px solid #22c55e;
+
+}
+
+
+.error {
+
+    background:
+        rgba(239,68,68,0.2);
+
+    border:
+        1px solid #ef4444;
+
+}
+
+
+/* =====================================================
+   ADMIN LOGIN
+===================================================== */
+
+#adminLogin {
+
+    max-width: 450px;
+
+    margin: 70px auto;
+
+}
+
+
+#adminLogin h2 {
+
+    text-align: center;
+
+    margin-bottom: 20px;
+
+}
+
+
+.cognito-login-info {
+
+    text-align: center;
+
+    color: #cbd5e1;
+
+    line-height: 1.6;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* =====================================================
+   ADMIN DASHBOARD
+===================================================== */
+
+#adminDashboard {
+
+    display: none;
+
+}
+
+
+.dashboard-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 25px;
+
+}
+
+
+.dashboard-header button {
+
+    padding: 10px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+.refresh-btn {
+
+    background: #38bdf8;
+
+}
+
+
+.logout-btn {
+
+    background: #ef4444;
+
+    color: white;
+
+    margin-left: 8px;
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+.stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.stat-card {
+
+    background: #1e293b;
+
+    padding: 22px;
+
+    border-radius: 14px;
+
+    text-align: center;
+
+    border:
+        1px solid #334155;
+
+}
+
+
+.stat-card h3 {
+
+    font-size: 30px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.stat-card p {
+
+    color: #cbd5e1;
+
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-container {
+
+    background: #1e293b;
+
+    border-radius: 14px;
+
+    overflow-x: auto;
+
+    border:
+        1px solid #334155;
+
+}
+
+
+table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 1000px;
+
+}
+
+
+th,
+td {
+
+    padding: 14px;
+
+    text-align: left;
+
+    border-bottom:
+        1px solid #334155;
+
+}
+
+
+th {
+
+    background: #0f172a;
+
+}
+
+
+td {
+
+    color: #e2e8f0;
+
+}
+
+
+.complaint-image {
+
+    width: 90px;
+
+    height: 70px;
+
+    object-fit: cover;
+
+    border-radius: 8px;
+
+}
+
+
+.status-select {
+
+    padding: 8px 10px;
+
+    border-radius: 7px;
+
+    border:
+        1px solid #64748b;
+
+    background: #0f172a;
+
+    color: white;
+
+    cursor: pointer;
+
+}
+
+
+.status-select:disabled {
+
+    opacity: 0.6;
+
+    cursor: wait;
+
+}
+
+
+.loading {
+
+    text-align: center;
+
+    padding: 30px;
+
+    color: #cbd5e1;
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width: 800px) {
+
+    .stats {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    header {
+
+        flex-direction: column;
+
+        gap: 15px;
+
+    }
+
+
+    .hero h2 {
+
+        font-size: 30px;
+
+    }
+
+}
+
+
+@media(max-width: 500px) {
+
+    .stats {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <h1>
+        🏙️ Smart City Complaint Portal
+    </h1>
+
+
+    <div class="nav-buttons">
+
+        <button
+            class="citizen-btn"
+            onclick="showCitizen()"
+        >
+            Citizen
+        </button>
+
+
+        <button
+            class="admin-btn"
+            onclick="showAdminLogin()"
+        >
+            Admin
+        </button>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     CITIZEN PAGE
+===================================================== -->
+
+<section id="citizenPage">
+
+    <div class="hero">
+
+        <h2>
+            Report a City Issue
+        </h2>
+
+
+        <p>
+            Upload an image and provide the location.
+            Our AI will automatically identify the issue.
+        </p>
+
+    </div>
+
+
+    <div class="card">
+
+        <form id="complaintForm">
+
+
+            <label>
+                📍 Location
+            </label>
+
+
+            <input
+                type="text"
+                id="location"
+                placeholder="Example: Shivajinagar"
+                required
+            >
+
+
+            <label>
+                📷 Upload Image
+            </label>
+
+
+            <input
+                type="file"
+                id="image"
+                accept="image/*"
+                required
+            >
+
+
+            <small
+                style="
+                    color:#94a3b8;
+                    display:block;
+                    margin-top:-12px;
+                    margin-bottom:20px;
+                "
+            >
+                Maximum image size: 6 MB
+            </small>
+
+
+            <button
+                type="submit"
+                class="submit-btn"
+                id="submitBtn"
+            >
+                Submit Complaint
+            </button>
+
+
+        </form>
+
+
+        <div
+            id="citizenMessage"
+            class="message"
+        ></div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ADMIN LOGIN
+===================================================== -->
+
+<section
+    id="adminLogin"
+    style="display:none;"
+>
+
+    <div class="card">
+
+
+        <h2>
+            🔐 Admin Login
+        </h2>
+
+
+        <p class="cognito-login-info">
+
+            Admin access is protected by
+            <strong>Amazon Cognito</strong>.
+
+            <br>
+
+            Click below to securely sign in.
+
+        </p>
+
+
+        <button
+            class="submit-btn"
+            onclick="loginAdmin()"
+        >
+            🔑 Login with Cognito
+        </button>
+
+
+        <div
+            id="loginMessage"
+            class="message"
+        ></div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     ADMIN DASHBOARD
+===================================================== -->
+
+<section id="adminDashboard">
+
+
+    <div class="dashboard-header">
+
+
+        <div>
+
+            <h2>
+                📊 Admin Dashboard
+            </h2>
+
+
+            <p
+                style="
+                    color:#94a3b8;
+                    margin-top:5px;
+                "
+            >
+                Manage city complaints
+            </p>
+
+        </div>
+
+
+        <div>
+
+
+            <button
+                class="refresh-btn"
+                onclick="loadComplaints()"
+            >
+                🔄 Refresh
+            </button>
+
+
+            <button
+                class="logout-btn"
+                onclick="logoutAdmin()"
+            >
+                Logout
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         STATS
+    ================================================== -->
+
+    <div class="stats">
+
+
+        <div class="stat-card">
+
+            <h3 id="totalCount">
+                0
+            </h3>
+
+            <p>
+                Total Complaints
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3 id="pendingCount">
+                0
+            </h3>
+
+            <p>
+                Pending
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3 id="progressCount">
+                0
+            </h3>
+
+            <p>
+                In Progress
+            </p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3 id="resolvedCount">
+                0
+            </h3>
+
+            <p>
+                Resolved
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         TABLE
+    ================================================== -->
+
+    <div class="table-container">
+
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Complaint ID
+                    </th>
+
+                    <th>
+                        Image
+                    </th>
+
+                    <th>
+                        Location
+                    </th>
+
+                    <th>
+                        AI Issue
+                    </th>
+
+                    <th>
+                        AI Labels
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Date & Time
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="complaintsTable">
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="loading"
+                    >
+                        Loading complaints...
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+
+
+</section>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   CONFIGURATION
+===================================================== */
+
+
+/* AMAZON COGNITO */
+
+const COGNITO_DOMAIN =
+    "https://ap-south-1xlewuz75h.auth.ap-south-1.amazoncognito.com";
+
+
+const COGNITO_CLIENT_ID =
+    "68ipl3evqubgqf4nja3oki1rjv";
+
+
+const REDIRECT_URI =
+    window.location.origin + "/";
+
+
+/* API */
+
+const API_BASE =
+    "https://7rbz9pjaw8.execute-api.ap-south-1.amazonaws.com";
+
+
+/* =====================================================
+   PAGE NAVIGATION
+===================================================== */
+
+function showCitizen() {
+
+    document
+        .getElementById("citizenPage")
+        .style.display = "block";
+
+
+    document
+        .getElementById("adminLogin")
+        .style.display = "none";
+
+
+    document
+        .getElementById("adminDashboard")
+        .style.display = "none";
+
+}
+
+
+function showAdminLogin() {
+
+    document
+        .getElementById("citizenPage")
+        .style.display = "none";
+
+
+    document
+        .getElementById("adminDashboard")
+        .style.display = "none";
+
+
+    document
+        .getElementById("adminLogin")
+        .style.display = "block";
+
+}
+
+
+/* =====================================================
+   CITIZEN COMPLAINT SUBMISSION
+===================================================== */
+
+document
+    .getElementById("complaintForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const location =
+                document
+                    .getElementById("location")
+                    .value
+                    .trim();
+
+
+            const imageInput =
+                document
+                    .getElementById("image");
+
+
+            const file =
+                imageInput.files[0];
+
+
+            if (!location) {
+
+                showCitizenMessage(
+                    "Please enter the location.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (!file) {
+
+                showCitizenMessage(
+                    "Please select an image.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            /* 6 MB LIMIT */
+
+            if (
+                file.size >
+                6 * 1024 * 1024
+            ) {
+
+                showCitizenMessage(
+                    "Image must be smaller than 6 MB.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            const submitBtn =
+                document
+                    .getElementById(
+                        "submitBtn"
+                    );
+
+
+            submitBtn.disabled =
+                true;
+
+
+            submitBtn.innerText =
+                "Uploading...";
+
+
+            try {
+
+
+                /* Convert image to Base64 */
+
+                const base64Image =
+                    await fileToBase64(
+                        file
+                    );
+
+
+                const requestBody = {
+
+                    location:
+                        location,
+
+                    imageName:
+                        file.name,
+
+                    image:
+                        base64Image
+
+                };
+
+
+                const response =
+                    await fetch(
+                        API_BASE +
+                        "/upload",
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    requestBody
+                                )
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "Upload response:",
+                    data
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.message ||
+                        "Complaint submission failed."
+                    );
+
+                }
+
+
+                showCitizenMessage(
+
+                    "✅ Complaint submitted successfully! " +
+                    "Complaint ID: " +
+                    (
+                        data.complaintId ||
+                        "Generated"
+                    ),
+
+                    "success"
+
+                );
+
+
+                document
+                    .getElementById(
+                        "complaintForm"
+                    )
+                    .reset();
+
+
+            }
+
+            catch(error) {
+
+                console.error(
+                    error
+                );
+
+
+                showCitizenMessage(
+
+                    "❌ " +
+                    error.message,
+
+                    "error"
+
+                );
+
+            }
+
+            finally {
+
+                submitBtn.disabled =
+                    false;
+
+
+                submitBtn.innerText =
+                    "Submit Complaint";
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   FILE → BASE64
+===================================================== */
+
+function fileToBase64(file) {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                () => {
+
+                    const result =
+                        reader.result;
+
+
+                    const base64 =
+                        result.split(",")[1];
+
+
+                    resolve(
+                        base64
+                    );
+
+                };
+
+
+            reader.onerror =
+                reject;
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CITIZEN MESSAGE
+===================================================== */
+
+function showCitizenMessage(
+    message,
+    type
+) {
+
+    const element =
+        document.getElementById(
+            "citizenMessage"
+        );
+
+
+    element.innerText =
+        message;
+
+
+    element.className =
+        "message " + type;
+
+
+    element.style.display =
+        "block";
+
+}
+
+
+/* =====================================================
+   ADMIN LOGIN
+   AMAZON COGNITO + PKCE
+===================================================== */
+
+async function loginAdmin() {
+
+    try {
+
+
+        /*
+           Generate random PKCE verifier
+        */
+
+        const randomBytes =
+            new Uint8Array(32);
+
+
+        crypto.getRandomValues(
+            randomBytes
+        );
+
+
+        const codeVerifier =
+            Array.from(
+                randomBytes
+            )
+            .map(
+                byte =>
+                    byte
+                        .toString(16)
+                        .padStart(
+                            2,
+                            "0"
+                        )
+            )
+            .join("");
+
+
+        /*
+           Create SHA-256 hash
+        */
+
+        const encoder =
+            new TextEncoder();
+
+
+        const data =
+            encoder.encode(
+                codeVerifier
+            );
+
+
+        const hash =
+            await crypto.subtle.digest(
+                "SHA-256",
+                data
+            );
+
+
+        /*
+           Convert hash to Base64URL
+        */
+
+        const codeChallenge =
+            btoa(
+                String.fromCharCode(
+                    ...new Uint8Array(
+                        hash
+                    )
+                )
+            )
+            .replace(
+                /\+/g,
+                "-"
+            )
+            .replace(
+                /\//g,
+                "_"
+            )
+            .replace(
+                /=+$/,
+                ""
+            );
+
+
+        /*
+           Save verifier
+        */
+
+        sessionStorage.setItem(
+            "pkce_code_verifier",
+            codeVerifier
+        );
+
+
+        /*
+           Create Cognito login URL
+        */
+
+        const loginUrl =
+            COGNITO_DOMAIN +
+            "/oauth2/authorize" +
+
+            "?response_type=code" +
+
+            "&client_id=" +
+            encodeURIComponent(
+                COGNITO_CLIENT_ID
+            ) +
+
+            "&redirect_uri=" +
+            encodeURIComponent(
+                REDIRECT_URI
+            ) +
+
+            "&scope=" +
+            encodeURIComponent(
+                "openid email"
+            ) +
+
+            "&code_challenge=" +
+            encodeURIComponent(
+                codeChallenge
+            ) +
+
+            "&code_challenge_method=S256";
+
+
+        /*
+           Redirect to Cognito
+        */
+
+        window.location.href =
+            loginUrl;
+
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Login initialization error:",
+            error
+        );
+
+
+        alert(
+            "Unable to start admin login."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   COGNITO LOGIN CALLBACK
+===================================================== */
+
+async function handleCognitoCallback() {
+
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const code =
+        params.get("code");
+
+
+    const error =
+        params.get("error");
+
+
+    /*
+       Cognito returned an error
+    */
+
+    if (error) {
+
+        console.error(
+            "Cognito error:",
+            error,
+            params.get(
+                "error_description"
+            )
+        );
+
+
+        alert(
+            params.get(
+                "error_description"
+            ) ||
+            "Cognito login failed."
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+       No authorization code
+    */
+
+    if (!code) {
+
+        return;
+
+    }
+
+
+    /*
+       Get PKCE verifier
+    */
+
+    const codeVerifier =
+        sessionStorage.getItem(
+            "pkce_code_verifier"
+        );
+
+
+    if (!codeVerifier) {
+
+        alert(
+            "Login session expired. Please login again."
+        );
+
+
+        return;
+
+    }
+
+
+    try {
+
+
+        /*
+           Exchange authorization code
+           for Cognito tokens
+        */
+
+        const response =
+            await fetch(
+
+                COGNITO_DOMAIN +
+                "/oauth2/token",
+
+                {
+
+                    method:
+                        "POST",
+
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+
+                    },
+
+
+                    body:
+                        new URLSearchParams({
+
+                            grant_type:
+                                "authorization_code",
+
+                            client_id:
+                                COGNITO_CLIENT_ID,
+
+                            code:
+                                code,
+
+                            redirect_uri:
+                                REDIRECT_URI,
+
+                            code_verifier:
+                                codeVerifier
+
+                        })
+
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Cognito token response:",
+            data
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                data.error_description ||
+
+                data.error ||
+
+                "Cognito authentication failed."
+
+            );
+
+        }
+
+
+        /*
+           Save login state
+        */
+
+        sessionStorage.setItem(
+            "adminLoggedIn",
+            "true"
+        );
+
+
+        /*
+           Save tokens
+        */
+
+        sessionStorage.setItem(
+            "accessToken",
+            data.access_token
+        );
+
+
+        sessionStorage.setItem(
+            "idToken",
+            data.id_token
+        );
+
+
+        /*
+           Remove temporary PKCE verifier
+        */
+
+        sessionStorage.removeItem(
+            "pkce_code_verifier"
+        );
+
+
+        /*
+           Remove ?code=...
+           from browser URL
+        */
+
+        window.history.replaceState(
+
+            {},
+
+            document.title,
+
+            window.location.pathname
+
+        );
+
+
+        /*
+           Show Admin Dashboard
+        */
+
+        document
+            .getElementById(
+                "citizenPage"
+            )
+            .style.display =
+            "none";
+
+
+        document
+            .getElementById(
+                "adminLogin"
+            )
+            .style.display =
+            "none";
+
+
+        document
+            .getElementById(
+                "adminDashboard"
+            )
+            .style.display =
+            "block";
+
+
+        /*
+           Load complaints
+        */
+
+        loadComplaints();
+
+
+    }
+
+    catch(error) {
+
+        console.error(
+            "Cognito callback error:",
+            error
+        );
+
+
+        alert(
+            "Admin login failed: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logoutAdmin() {
+
+
+    /*
+       Remove local session
+    */
+
+    sessionStorage.removeItem(
+        "adminLoggedIn"
+    );
+
+
+    sessionStorage.removeItem(
+        "accessToken"
+    );
+
+
+    sessionStorage.removeItem(
+        "idToken"
+    );
+
+
+    sessionStorage.removeItem(
+        "pkce_code_verifier"
+    );
+
+
+    /*
+       Cognito logout
+    */
+
+    const logoutUrl =
+        COGNITO_DOMAIN +
+        "/logout" +
+
+        "?client_id=" +
+        encodeURIComponent(
+            COGNITO_CLIENT_ID
+        ) +
+
+        "&logout_uri=" +
+        encodeURIComponent(
+            REDIRECT_URI
+        );
+
+
+    window.location.href =
+        logoutUrl;
+
+}
+
+
+/* =====================================================
+   LOAD COMPLAINTS
+===================================================== */
+
+async function loadComplaints() {
+
+
+    const table =
+        document.getElementById(
+            "complaintsTable"
+        );
+
+
+    table.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="7"
+                class="loading"
+            >
+                Loading complaints...
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try {
+
+
+        const response =
+    await fetch(
+        API_BASE +
+        "/complaints",
+        {
+            headers: {
+                "Authorization":
+                    `Bearer ${sessionStorage.getItem("accessToken")}`
+            }
+        }
+    );
+
+
+        const responseData =
+            await response.json();
+
+
+        console.log(
+            "Complaints response:",
+            responseData
+        );
+
+
+        /*
+           API may return:
+
+           {
+               statusCode: 200,
+               body: "..."
+           }
+
+           OR direct JSON.
+        */
+
+        let data;
+
+
+        if (
+
+            responseData.body &&
+
+            typeof responseData.body ===
+                "string"
+
+        ) {
+
+            data =
+                JSON.parse(
+                    responseData.body
+                );
+
+        }
+
+        else {
+
+            data =
+                responseData;
+
+        }
+
+
+        /*
+           Handle different structures
+        */
+
+        let complaints =
+            data.complaints ||
+            data.items ||
+            data;
+
+
+        if (
+            !Array.isArray(
+                complaints
+            )
+        ) {
+
+            complaints = [];
+
+        }
+
+
+        /*
+           Newest first
+        */
+
+        complaints.sort(
+
+            (a, b) =>
+
+                new Date(
+                    b.createdAt || 0
+                ) -
+
+                new Date(
+                    a.createdAt || 0
+                )
+
+        );
+
+
+        /*
+           Update statistics
+        */
+
+        updateStats(
+            complaints
+        );
+
+
+        if (
+            complaints.length === 0
+        ) {
+
+            table.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="loading"
+                    >
+                        No complaints found.
+                    </td>
+
+                </tr>
+
+            `;
+
+
+            return;
+
+        }
+
+
+        /*
+           Create table
+        */
+
+        table.innerHTML =
+
+            complaints
+
+                .map(
+                    complaint =>
+                        createComplaintRow(
+                            complaint
+                        )
+                )
+
+                .join("");
+
+
+    }
+
+    catch(error) {
+
+        console.error(
+            error
+        );
+
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="loading"
+                >
+                    ❌ Failed to load complaints.
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   CREATE TABLE ROW
+===================================================== */
+
+function createComplaintRow(
+    complaint
+) {
+
+
+    const complaintId =
+        escapeHtml(
+            complaint.complaintId ||
+            "-"
+        );
+
+
+    const location =
+        escapeHtml(
+            complaint.location ||
+            "-"
+        );
+
+
+    const issue =
+        escapeHtml(
+            complaint.issue ||
+            "Unknown"
+        );
+
+
+    const labels =
+
+        Array.isArray(
+            complaint.rekognitionLabels
+        )
+
+            ? complaint
+                .rekognitionLabels
+                .map(
+                    label =>
+                        escapeHtml(
+                            label
+                        )
+                )
+                .join(", ")
+
+            : escapeHtml(
+                complaint.rekognitionLabels ||
+                "-"
+            );
+
+
+    const status =
+        complaint.status ||
+        "Pending";
+
+
+    const date =
+        complaint.createdAt
+
+            ? new Date(
+                complaint.createdAt
+            ).toLocaleString()
+
+            : "-";
+
+
+    let imageHtml =
+        "No Image";
+
+
+    if (
+        complaint.imageUrl
+    ) {
+
+        imageHtml = `
+
+            <img
+
+                src="${escapeHtml(
+                    complaint.imageUrl
+                )}"
+
+                class="complaint-image"
+
+                alt="Complaint Image"
+
+            >
+
+        `;
+
+    }
+
+
+    return `
+
+        <tr>
+
+
+            <td>
+
+                <strong>
+                    ${complaintId}
+                </strong>
+
+            </td>
+
+
+            <td>
+
+                ${imageHtml}
+
+            </td>
+
+
+            <td>
+
+                ${location}
+
+            </td>
+
+
+            <td>
+
+                <strong>
+                    ${issue}
+                </strong>
+
+            </td>
+
+
+            <td>
+
+                ${labels}
+
+            </td>
+
+
+            <td>
+
+
+                <select
+
+                    class="status-select"
+
+                    onchange="
+                        updateComplaintStatus(
+                            '${escapeJs(
+                                complaint.complaintId
+                            )}',
+                            this
+                        )
+                    "
+
+                >
+
+
+                    <option
+
+                        value="Pending"
+
+                        ${
+                            status ===
+                            "Pending"
+                                ? "selected"
+                                : ""
+                        }
+
+                    >
+                        Pending
+                    </option>
+
+
+                    <option
+
+                        value="In Progress"
+
+                        ${
+                            status ===
+                            "In Progress"
+                                ? "selected"
+                                : ""
+                        }
+
+                    >
+                        In Progress
+                    </option>
+
+
+                    <option
+
+                        value="Resolved"
+
+                        ${
+                            status ===
+                            "Resolved"
+                                ? "selected"
+                                : ""
+                        }
+
+                    >
+                        Resolved
+                    </option>
+
+
+                </select>
+
+
+            </td>
+
+
+            <td>
+
+                ${escapeHtml(
+                    date
+                )}
+
+            </td>
+
+
+        </tr>
+
+    `;
+
+}
+
+
+/* =====================================================
+   UPDATE COMPLAINT STATUS
+===================================================== */
+
+async function updateComplaintStatus(
+    complaintId,
+    selectElement
+) {
+
+
+    const newStatus =
+        selectElement.value;
+
+
+    selectElement.disabled =
+        true;
+
+
+    try {
+
+
+        console.log(
+            "Updating:",
+            complaintId,
+            newStatus
+        );
+
+
+        const accessToken =
+            sessionStorage.getItem(
+                "accessToken"
+            );
+
+
+        const headers = {
+
+            "Content-Type":
+                "application/json"
+
+        };
+
+
+        /*
+           Send Cognito access token
+           when available.
+        */
+
+        if (accessToken) {
+
+            headers[
+                "Authorization"
+            ] =
+                "Bearer " +
+                accessToken;
+
+        }
+
+
+        const response =
+            await fetch(
+
+                API_BASE +
+                "/complaints",
+
+                {
+
+                    method:
+                        "PATCH",
+
+                    headers:
+                        headers,
+
+                    body:
+                        JSON.stringify({
+
+                            complaintId:
+                                complaintId,
+
+                            status:
+                                newStatus
+
+                        })
+
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "PATCH response:",
+            data
+        );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                data.message ||
+
+                "Failed to update status."
+
+            );
+
+        }
+
+
+        alert(
+
+            "✅ Complaint " +
+
+            complaintId +
+
+            " updated to " +
+
+            newStatus
+
+        );
+
+
+        await loadComplaints();
+
+
+    }
+
+    catch(error) {
+
+        console.error(
+            error
+        );
+
+
+        alert(
+
+            "❌ Failed to update status: " +
+
+            error.message
+
+        );
+
+
+        await loadComplaints();
+
+    }
+
+    finally {
+
+        selectElement.disabled =
+            false;
+
+    }
+
+}
+
+
+/* =====================================================
+   UPDATE DASHBOARD STATS
+===================================================== */
+
+function updateStats(
+    complaints
+) {
+
+
+    let pending =
+        0;
+
+
+    let inProgress =
+        0;
+
+
+    let resolved =
+        0;
+
+
+    complaints.forEach(
+        complaint => {
+
+
+            const status =
+                complaint.status ||
+                "Pending";
+
+
+            if (
+                status ===
+                "Pending"
+            ) {
+
+                pending++;
+
+            }
+
+
+            else if (
+                status ===
+                "In Progress"
+            ) {
+
+                inProgress++;
+
+            }
+
+
+            else if (
+                status ===
+                "Resolved"
+            ) {
+
+                resolved++;
+
+            }
+
+        }
+    );
+
+
+    document
+        .getElementById(
+            "totalCount"
+        )
+        .innerText =
+        complaints.length;
+
+
+    document
+        .getElementById(
+            "pendingCount"
+        )
+        .innerText =
+        pending;
+
+
+    document
+        .getElementById(
+            "progressCount"
+        )
+        .innerText =
+        inProgress;
+
+
+    document
+        .getElementById(
+            "resolvedCount"
+        )
+        .innerText =
+        resolved;
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHtml(
+    value
+) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   JAVASCRIPT STRING ESCAPE
+===================================================== */
+
+function escapeJs(
+    value
+) {
+
+    return String(value)
+
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+
+        .replace(
+            /'/g,
+            "\\'"
+        )
+
+        .replace(
+            /"/g,
+            '\\"'
+        );
+
+}
+
+
+/* =====================================================
+   AUTO LOGIN / SESSION CHECK
+===================================================== */
+
+window.addEventListener(
+    "load",
+    function() {
+
+
+        const loggedIn =
+            sessionStorage.getItem(
+                "adminLoggedIn"
+            );
+
+
+        /*
+           If already logged in,
+           show dashboard.
+        */
+
+        if (
+            loggedIn ===
+            "true"
+        ) {
+
+
+            document
+                .getElementById(
+                    "citizenPage"
+                )
+                .style.display =
+                "none";
+
+
+            document
+                .getElementById(
+                    "adminLogin"
+                )
+                .style.display =
+                "none";
+
+
+            document
+                .getElementById(
+                    "adminDashboard"
+                )
+                .style.display =
+                "block";
+
+
+            loadComplaints();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   START COGNITO CALLBACK CHECK
+===================================================== */
+
+handleCognitoCallback();
+
+</script>
+
+
+</body>
+
+</html>
