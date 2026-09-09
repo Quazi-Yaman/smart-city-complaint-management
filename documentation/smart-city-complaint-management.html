@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart City Complaint Management System | AWS Serverless</title>
+
+<style>
+    :root {
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --text: #172033;
+        --muted: #667085;
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --border: #e5e7eb;
+        --dark: #111827;
+        --success: #15803d;
+        --warning: #b45309;
+        --code: #0f172a;
+    }
+
+    * {
+        box-sizing: border-box;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        font-family: Inter, Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+    }
+
+    a {
+        color: var(--primary);
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 260px;
+        height: 100vh;
+        background: var(--dark);
+        color: white;
+        padding: 28px 20px;
+        overflow-y: auto;
+    }
+
+    .sidebar h2 {
+        font-size: 20px;
+        margin: 0 0 6px;
+    }
+
+    .sidebar p {
+        color: #9ca3af;
+        font-size: 13px;
+        margin-bottom: 24px;
+    }
+
+    .sidebar a {
+        display: block;
+        color: #d1d5db;
+        padding: 8px 10px;
+        border-radius: 8px;
+        margin-bottom: 3px;
+        font-size: 14px;
+    }
+
+    .sidebar a:hover {
+        background: #1f2937;
+        color: white;
+        text-decoration: none;
+    }
+
+    .content {
+        margin-left: 260px;
+        padding: 40px;
+        max-width: 1500px;
+    }
+
+    .hero {
+        background: linear-gradient(135deg, #172554, #2563eb);
+        color: white;
+        padding: 55px;
+        border-radius: 22px;
+        margin-bottom: 30px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.12);
+    }
+
+    .hero h1 {
+        font-size: 44px;
+        line-height: 1.15;
+        margin: 0 0 15px;
+    }
+
+    .hero p {
+        max-width: 900px;
+        font-size: 18px;
+        color: #dbeafe;
+    }
+
+    .badge {
+        display: inline-block;
+        background: rgba(255,255,255,.15);
+        border: 1px solid rgba(255,255,255,.25);
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        margin: 3px;
+    }
+
+    section {
+        background: var(--card);
+        padding: 30px;
+        margin-bottom: 25px;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: 0 5px 20px rgba(15,23,42,.04);
+    }
+
+    h2 {
+        font-size: 28px;
+        margin-top: 0;
+        color: #111827;
+    }
+
+    h3 {
+        color: #1f2937;
+        margin-top: 28px;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+    }
+
+    .card {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 20px;
+    }
+
+    .card h3 {
+        margin-top: 0;
+        font-size: 18px;
+    }
+
+    .service {
+        border-left: 4px solid var(--primary);
+    }
+
+    .service strong {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 17px;
+    }
+
+    .flow {
+        background: #f8fafc;
+        border: 1px solid var(--border);
+        padding: 24px;
+        border-radius: 15px;
+        font-family: Consolas, monospace;
+        white-space: pre-wrap;
+        overflow-x: auto;
+    }
+
+    .step {
+        display: flex;
+        gap: 15px;
+        margin: 14px 0;
+        align-items: flex-start;
+    }
+
+    .step-number {
+        min-width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    code {
+        background: #eef2ff;
+        padding: 3px 7px;
+        border-radius: 5px;
+        color: #3730a3;
+    }
+
+    pre {
+        background: var(--code);
+        color: #e5e7eb;
+        padding: 20px;
+        border-radius: 12px;
+        overflow-x: auto;
+        font-size: 14px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+
+    th, td {
+        border: 1px solid var(--border);
+        padding: 12px;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    th {
+        background: #f1f5f9;
+    }
+
+    .url-box {
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        padding: 16px;
+        border-radius: 12px;
+        margin: 10px 0;
+        overflow-wrap: anywhere;
+    }
+    .pdf-button {
+    position: fixed;
+    top: 20px;
+    right: 25px;
+    z-index: 1000;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.pdf-button:hover {
+    background: #1d4ed8;
+}
+
+@media print {
+    .pdf-button {
+        display: none;
+    }
+
+    .sidebar {
+        display: none;
+    }
+
+    .content {
+        margin-left: 0;
+        padding: 20px;
+    }
+}
+
+    .status {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: bold;
+        background: #dcfce7;
+        color: var(--success);
+    }
+
+    .warning {
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        color: #9a3412;
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .success {
+        background: #f0fdf4;
+        border: 1px solid #bbf7d0;
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .screenshot {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+    }
+
+    .screenshot-card {
+        overflow: hidden;
+    }
+
+    .screenshot-card img {
+        display: block;
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+    }
+
+    .screenshot-card div {
+        padding: 15px;
+    }
+
+    footer {
+        text-align: center;
+        color: var(--muted);
+        padding: 30px;
+    }
+
+    @media (max-width: 900px) {
+        .sidebar {
+            position: relative;
+            width: 100%;
+            height: auto;
+        }
+
+        .content {
+            margin-left: 0;
+            padding: 20px;
+        }
+
+        .hero {
+            padding: 30px;
+        }
+
+        .hero h1 {
+            font-size: 32px;
+        }
+    }
+
+    @media print {
+        .sidebar {
+            display: none;
+        }
+
+        .content {
+            margin: 0;
+            max-width: none;
+        }
+
+        section {
+            break-inside: avoid;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+    <h2>Smart City</h2>
+    <p>AWS Serverless Complaint Management</p>
+
+
+<a href="#overview">Overview</a>
+<a href="#problem">Problem Statement</a>
+<a href="#objectives">Objectives</a>
+<a href="#architecture">Architecture</a>
+<a href="#services">AWS Services</a>
+<a href="#workflow">System Workflow</a>
+<a href="#cognito">Authentication</a>
+<a href="#backend">Backend</a>
+<a href="#rekognition">Rekognition</a>
+<a href="#dynamodb">DynamoDB</a>
+<a href="#storage">S3 Storage</a>
+<a href="#polly">Amazon Polly</a>
+<a href="#sns">Amazon SNS</a>
+<a href="#api">API Documentation</a>
+<a href="#screenshots">Evidence</a>
+<a href="#security">Security</a>
+<a href="#future">Future Enhancements</a>
+<a href="#links">Project Links</a>
+<a href="#conclusion">Conclusion</a>
+
+
+</aside>
+
+<main class="content">
+
+<!-- HERO -->
+
+<div class="hero">
+    <span class="badge">AWS Serverless</span>
+    <span class="badge">Artificial Intelligence</span>
+    <span class="badge">Cloud Computing</span>
+    <span class="badge">REST API</span>
+
+
+<h1>Smart City Complaint Management System</h1>
+
+<p>
+    A serverless civic complaint management platform built on AWS that allows
+    citizens to submit complaints using images, automatically analyzes uploaded
+    images using Amazon Rekognition, stores complaint information in DynamoDB,
+    generates audio responses using Amazon Polly, and sends notifications through SNS.
+</p>
+
+<p>
+    The application is delivered through Amazon CloudFront with authentication
+    supported by Amazon Cognito.
+</p>
+
+
+</div>
+
+<!-- OVERVIEW -->
+
+<section id="overview">
+    <h2>1. Project Overview</h2>
+
+
+<p>
+    The Smart City Complaint Management System is a cloud-based application designed
+    to digitize the process of reporting and managing civic issues such as garbage,
+    potholes, streetlights, traffic-related problems and other public infrastructure
+    issues.
+</p>
+
+<p>
+    Instead of relying on manual complaint registration, the system allows citizens
+    to submit an image and location through a web application. AWS services process
+    the complaint automatically and provide structured information to the backend.
+</p>
+
+<div class="success">
+    <strong>Project Type:</strong> Serverless AWS application<br>
+    <strong>Region:</strong> ap-south-1 (Mumbai)<br>
+    <strong>Backend:</strong> Python + AWS Lambda + API Gateway<br>
+    <strong>Database:</strong> Amazon DynamoDB<br>
+    <strong>AI:</strong> Amazon Rekognition<br>
+    <strong>Authentication:</strong> Amazon Cognito
+</div>
+
+
+</section>
+
+<!-- PROBLEM -->
+
+<section id="problem">
+    <h2>2. Problem Statement</h2>
+
+
+<p>
+    Traditional civic complaint systems may require manual registration,
+    limited information and separate communication channels.
+    This can make it difficult to classify complaints, track their status
+    and notify relevant users efficiently.
+</p>
+
+<p>
+    This project demonstrates how serverless cloud services and AI can be combined
+    to create a centralized complaint-management workflow.
+</p>
+
+
+</section>
+
+<!-- OBJECTIVES -->
+
+<section id="objectives">
+    <h2>3. Project Objectives</h2>
+
+
+<div class="grid">
+
+    <div class="card">
+        <h3>Citizen Reporting</h3>
+        <p>
+            Allow citizens to submit civic complaints with location and image information.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>AI Analysis</h3>
+        <p>
+            Analyze uploaded images using Amazon Rekognition.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Centralized Data</h3>
+        <p>
+            Store complaint records in Amazon DynamoDB.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Audio Response</h3>
+        <p>
+            Generate spoken complaint information using Amazon Polly.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Notifications</h3>
+        <p>
+            Send complaint notifications using Amazon SNS.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Secure Access</h3>
+        <p>
+            Use Amazon Cognito to support authenticated application access.
+        </p>
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- ARCHITECTURE -->
+
+<section id="architecture">
+    <h2>4. System Architecture</h2>
+
+
+<div class="flow">
+
+
+Citizen / User
+|
+v
+Amazon S3
+Frontend Hosting
+|
+v
+Amazon CloudFront
+CDN + HTTPS
+|
+v
+Amazon API Gateway
+REST API
+|
+v
+AWS Lambda
+Python Backend
+|
++----------------------+
+|          |           |
+v          v           v
+Amazon S3   DynamoDB    Rekognition
+Images      Complaints  Image Analysis
+|
++----------------------+
+|          |
+v          v
+Amazon Polly   Amazon SNS
+Audio          Notifications
+
+Administrator
+|
+v
+Amazon Cognito
+Authentication
+|
+v
+Authenticated Application
+|
+v
+API Gateway
+|
+v
+Lambda → DynamoDB </div>
+
+
+<p>
+    The architecture is serverless, meaning the application does not require
+    a traditional always-running backend server.
+</p>
+
+<p>
+    The architecture diagram is also available in the project's
+    <a href="https://github.com/Quazi-Yaman/smart-city-complaint-management/tree/main/architecture"
+       target="_blank">GitHub architecture folder</a>.
+</p>
+
+
+</section>
+
+<!-- AWS SERVICES -->
+
+<section id="services">
+    <h2>5. AWS Services Used</h2>
+
+
+<div class="grid">
+
+    <div class="card service">
+        <strong>Amazon S3</strong>
+        Frontend hosting and storage of complaint images and generated audio files.
+    </div>
+
+    <div class="card service">
+        <strong>Amazon CloudFront</strong>
+        Global content delivery, HTTPS access and public delivery of the web application.
+    </div>
+
+    <div class="card service">
+        <strong>Amazon Cognito</strong>
+        Authentication layer for authenticated application/admin access.
+    </div>
+
+    <div class="card service">
+        <strong>Amazon API Gateway</strong>
+        REST API entry point between the frontend and Lambda backend.
+    </div>
+
+    <div class="card service">
+        <strong>AWS Lambda</strong>
+        Serverless Python backend responsible for complaint processing.
+    </div>
+
+    <div class="card service">
+        <strong>Amazon DynamoDB</strong>
+        NoSQL database storing complaint information.
+    </div>
+
+    <div class="card service">
+        <strong>Amazon Rekognition</strong>
+        Image label detection used for complaint analysis.
+    </div>
+
+    <div class="card service">
+        <strong>Amazon Polly</strong>
+        Converts complaint information into speech and generates MP3 audio.
+    </div>
+
+    <div class="card service">
+        <strong>Amazon SNS</strong>
+        Sends complaint notifications.
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- WORKFLOW -->
+
+<section id="workflow">
+    <h2>6. End-to-End Workflow</h2>
+
+
+<div class="step">
+    <div class="step-number">1</div>
+    <div>
+        <strong>Citizen opens the portal</strong><br>
+        The frontend is delivered through Amazon CloudFront.
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-number">2</div>
+    <div>
+        <strong>Complaint submission</strong><br>
+        The citizen selects a location and uploads an image.
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-number">3</div>
+    <div>
+        <strong>API Gateway receives the request</strong><br>
+        The REST API forwards the request to AWS Lambda.
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-number">4</div>
+    <div>
+        <strong>Lambda creates a complaint ID</strong><br>
+        A unique ID such as <code>CMP-XXXXXXXX</code> is generated.
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-number">5</div>
+    <div>
+        <strong>Image stored in S3</strong><br>
+        The Base64 image is decoded and uploaded to Amazon S3.
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-number">6</div>
+    <div>
+        <strong>Rekognition analyzes the image</strong><br>
+        Amazon Rekognition detects labels from the uploaded image.
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-number">7</div>
+    <div>
+        <strong>Issue classification</strong><br>
+        Detected labels are matched against complaint-category keywords.
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-number">8</div>
+    <div>
+        <strong>Complaint stored</strong><br>
+        Complaint information is stored in DynamoDB.
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-number">9</div>
+    <div>
+        <strong>Audio generated</strong><br>
+        Amazon Polly converts complaint information into an MP3 file.
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-number">10</div>
+    <div>
+        <strong>Notification sent</strong><br>
+        Amazon SNS publishes a complaint notification.
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-number">11</div>
+    <div>
+        <strong>Result returned</strong><br>
+        The API returns complaint ID, issue, Rekognition labels, status and audio information.
+    </div>
+</div>
+
+
+</section>
+
+<!-- COGNITO -->
+
+<section id="cognito">
+    <h2>7. Amazon Cognito Authentication</h2>
+
+
+<p>
+    Amazon Cognito is used as the authentication layer for the application.
+    It provides an identity mechanism for authenticated users and administrative
+    access rather than exposing administrative functionality as an unrestricted
+    public interface.
+</p>
+
+<div class="flow">
+
+
+User
+↓
+Amazon Cognito
+↓
+Authentication
+↓
+Authenticated Application
+↓
+API Gateway
+↓
+AWS Lambda
+↓
+DynamoDB </div>
+
+
+<p>
+    Cognito can also be extended with stronger role-based authorization,
+    such as separate citizen and administrator permissions.
+</p>
+
+
+</section>
+
+<!-- BACKEND -->
+
+<section id="backend">
+    <h2>8. Backend Implementation</h2>
+
+
+<p>
+    The backend is implemented using Python and AWS Lambda.
+    The Lambda function acts as the central processing layer for the application.
+</p>
+
+<h3>Lambda Responsibilities</h3>
+
+<ul>
+    <li>Receive API requests</li>
+    <li>Validate complaint data</li>
+    <li>Generate complaint IDs</li>
+    <li>Decode Base64 images</li>
+    <li>Upload images to S3</li>
+    <li>Call Amazon Rekognition</li>
+    <li>Classify the complaint</li>
+    <li>Store records in DynamoDB</li>
+    <li>Generate Polly audio</li>
+    <li>Store audio in S3</li>
+    <li>Publish SNS notifications</li>
+    <li>Return API responses</li>
+</ul>
+
+<p>
+    Backend source code is available in the repository's
+    <a href="https://github.com/Quazi-Yaman/smart-city-complaint-management/tree/main/backend"
+       target="_blank">backend folder</a>.
+</p>
+
+
+</section>
+
+<!-- REKOGNITION -->
+
+<section id="rekognition">
+    <h2>9. Amazon Rekognition Integration</h2>
+
+
+<p>
+    Amazon Rekognition is used to analyze uploaded complaint images.
+    The service detects objects and concepts represented by labels.
+</p>
+
+<pre><code>rekognition.detect_labels(
+Image={"Bytes": image_bytes},
+MaxLabels=20,
+MinConfidence=40
+
+
+)</code></pre>
+
+
+<h3>Issue Classification</h3>
+
+<table>
+    <tr>
+        <th>Complaint Category</th>
+        <th>Example Matching Keywords</th>
+    </tr>
+    <tr>
+        <td>Garbage</td>
+        <td>garbage, waste, trash, litter, rubbish, dump, debris</td>
+    </tr>
+    <tr>
+        <td>Pothole</td>
+        <td>pothole, road damage, damaged road, hole, puddle, manhole, tar, street</td>
+    </tr>
+    <tr>
+        <td>Streetlight</td>
+        <td>streetlight, street lamp, lamp, light</td>
+    </tr>
+    <tr>
+        <td>Traffic</td>
+        <td>traffic, car, vehicle, automobile, bus, truck, motorcycle</td>
+    </tr>
+    <tr>
+        <td>Unknown</td>
+        <td>Used when no configured keyword matches the detected labels.</td>
+    </tr>
+</table>
+
+<h3>Processing Logic</h3>
+
+<div class="flow">
+
+
+Uploaded Image
+↓
+Amazon Rekognition
+↓
+Detected Labels
+↓
+Keyword Matching
+↓
+Complaint Category
+↓
+DynamoDB </div>
+
+</section>
+
+<!-- DYNAMODB -->
+
+<section id="dynamodb">
+    <h2>10. Amazon DynamoDB</h2>
+
+
+<p>
+    Complaint records are stored in the DynamoDB table
+    <code>Complaints</code>.
+</p>
+
+<table>
+    <tr>
+        <th>Field</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>complaintId</td>
+        <td>Unique complaint identifier.</td>
+    </tr>
+    <tr>
+        <td>location</td>
+        <td>Location selected by the citizen.</td>
+    </tr>
+    <tr>
+        <td>issue</td>
+        <td>Classified complaint category.</td>
+    </tr>
+    <tr>
+        <td>rekognitionLabels</td>
+        <td>Labels detected by Amazon Rekognition.</td>
+    </tr>
+    <tr>
+        <td>imageName</td>
+        <td>Original uploaded image filename.</td>
+    </tr>
+    <tr>
+        <td>s3Key</td>
+        <td>Location of the complaint image in S3.</td>
+    </tr>
+    <tr>
+        <td>status</td>
+        <td>Pending, In Progress or Resolved.</td>
+    </tr>
+    <tr>
+        <td>createdAt</td>
+        <td>Complaint creation timestamp.</td>
+    </tr>
+</table>
+
+<h3>Complaint Status</h3>
+
+<ul>
+    <li><code>Pending</code></li>
+    <li><code>In Progress</code></li>
+    <li><code>Resolved</code></li>
+</ul>
+
+
+</section>
+
+<!-- S3 -->
+
+<section id="storage">
+    <h2>11. Amazon S3 Storage</h2>
+
+
+<p>
+    Amazon S3 is used for both frontend hosting/storage and application-generated files.
+</p>
+
+<div class="grid">
+
+    <div class="card">
+        <h3>Complaint Images</h3>
+        <p>
+            Bucket: <code>yaman-complaint-images</code>
+        </p>
+        <p>
+            Image key format:
+            <code>complaints/{complaintId}-{imageName}</code>
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Complaint Audio</h3>
+        <p>
+            Generated using Amazon Polly.
+        </p>
+        <p>
+            Audio key format:
+            <code>complaint-audio/{complaintId}.mp3</code>
+        </p>
+    </div>
+
+</div>
+
+<p>
+    Temporary access to generated audio can be provided using a presigned S3 URL.
+</p>
+
+
+</section>
+
+<!-- POLLY -->
+
+<section id="polly">
+    <h2>12. Amazon Polly</h2>
+
+
+<p>
+    Amazon Polly converts generated complaint information into speech.
+    The backend generates an MP3 file and stores it in Amazon S3.
+</p>
+
+<pre><code>polly.synthesize_speech(
+Text=complaint_text,
+VoiceId="Joanna",
+OutputFormat="mp3",
+Engine="standard"
+
+
+)</code></pre>
+
+
+<div class="flow">
+
+
+Complaint Information
+↓
+Amazon Polly
+↓
+MP3 Audio
+↓
+Amazon S3
+↓
+Presigned Audio URL </div>
+
+</section>
+
+<!-- SNS -->
+
+<section id="sns">
+    <h2>13. Amazon SNS Notifications</h2>
+
+
+<p>
+    Amazon SNS is used to publish complaint notifications after successful
+    complaint processing.
+</p>
+
+<p>
+    The notification can include information such as:
+</p>
+
+<ul>
+    <li>Complaint ID</li>
+    <li>Location</li>
+    <li>Detected issue</li>
+    <li>Complaint status</li>
+    <li>Audio URL</li>
+</ul>
+
+<p>
+    SNS topic used by the application:
+    <code>SmartCityComplaintAlerts</code>
+</p>
+
+
+</section>
+
+<!-- API -->
+
+<section id="api">
+    <h2>14. API Documentation</h2>
+
+
+<div class="url-box">
+    <strong>API Gateway Base URL</strong><br>
+    https://7rbz9pjaw8.execute-api.ap-south-1.amazonaws.com
+</div>
+
+<p>
+    The exact deployed route or stage should be appended according to the
+    API Gateway deployment configuration.
+</p>
+
+<h3>POST — Create Complaint</h3>
+
+<p>
+    Creates a new complaint and starts the complete image-analysis workflow.
+</p>
+
+<pre><code>{
+
+
+"location": "Kondhwa",
+"imageName": "garbage1.jpg",
+"image": "<BASE64_ENCODED_IMAGE>"
+}</code></pre>
+
+
+<h3>Successful Response</h3>
+
+<pre><code>{
+
+
+"message": "Complaint uploaded successfully",
+"complaintId": "CMP-XXXXXXXX",
+"location": "Kondhwa",
+"imageName": "garbage1.jpg",
+"s3Key": "complaints/CMP-XXXXXXXX-garbage1.jpg",
+"issue": "Garbage",
+"rekognitionLabels": [
+"Garbage",
+"Waste"
+],
+"status": "Pending",
+"createdAt": "2026-09-10T00:00:00+00:00",
+"unresolvedComplaints": 1,
+"audioKey": "complaint-audio/CMP-XXXXXXXX.mp3",
+"audioUrl": "<TEMPORARY_PRESIGNED_AUDIO_URL>"
+}</code></pre>
+
+
+<h3>GET — Retrieve Complaints</h3>
+
+<p>
+    Retrieves complaint records from DynamoDB. The backend scans the complaint
+    table, applies pagination handling and returns the newest records first.
+</p>
+
+<h3>PATCH — Update Complaint Status</h3>
+
+<p>
+    Updates the status of an existing complaint.
+</p>
+
+<pre><code>{
+
+
+"complaintId": "CMP-XXXXXXXX",
+"status": "Resolved"
+}</code></pre>
+
+
+<p>Allowed status values:</p>
+
+<ul>
+    <li><code>Pending</code></li>
+    <li><code>In Progress</code></li>
+    <li><code>Resolved</code></li>
+</ul>
+
+<h3>OPTIONS — CORS Preflight</h3>
+
+<p>
+    The API supports OPTIONS requests for browser CORS preflight handling.
+</p>
+
+<h3>CORS Configuration</h3>
+
+<pre><code>Access-Control-Allow-Origin: *
+
+
+Access-Control-Allow-Headers: Content-Type,Authorization
+Access-Control-Allow-Methods: GET,POST,PATCH,OPTIONS</code></pre>
+
+
+<div class="warning">
+    For production deployment, CORS should be restricted to the trusted
+    frontend domain rather than using a wildcard origin.
+</div>
+
+
+</section>
+
+<!-- SCREENSHOTS -->
+
+<section id="screenshots">
+    <h2>15. Project Evidence & Screenshots</h2>
+
+
+<p>
+    The project repository contains screenshots demonstrating the working
+    application. These screenshots provide visual evidence of the frontend,
+    administrator portal and notification workflow.
+</p>
+
+<div class="grid">
+
+    <div class="card screenshot-card">
+        <img src="https://raw.githubusercontent.com/Quazi-Yaman/smart-city-complaint-management/main/screenshots/citizen-portal.png"
+             alt="Citizen Portal">
+        <div>
+            <h3>Citizen Portal</h3>
+            <p>
+                Main citizen-facing complaint submission interface.
+            </p>
+            <a href="https://github.com/Quazi-Yaman/smart-city-complaint-management/blob/main/screenshots/citizen-portal.png"
+               target="_blank">
+                View on GitHub →
+            </a>
+        </div>
+    </div>
+
+    <div class="card screenshot-card">
+        <img src="https://raw.githubusercontent.com/Quazi-Yaman/smart-city-complaint-management/main/screenshots/admin-portal.png"
+             alt="Admin Portal">
+        <div>
+            <h3>Admin Portal</h3>
+            <p>
+                Administrative interface used for viewing and managing complaints.
+            </p>
+            <a href="https://github.com/Quazi-Yaman/smart-city-complaint-management/blob/main/screenshots/admin-portal.png"
+               target="_blank">
+                View on GitHub →
+            </a>
+        </div>
+    </div>
+
+    <div class="card screenshot-card">
+        <img src="https://raw.githubusercontent.com/Quazi-Yaman/smart-city-complaint-management/main/screenshots/email-notification.png"
+             alt="Email Notification">
+        <div>
+            <h3>SNS Email Notification</h3>
+            <p>
+                Example notification generated through Amazon SNS.
+            </p>
+            <a href="https://github.com/Quazi-Yaman/smart-city-complaint-management/blob/main/screenshots/email-notification.png"
+               target="_blank">
+                View on GitHub →
+            </a>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+</section>
+
+<!-- SECURITY -->
+
+<section id="security">
+    <h2>16. Security Considerations</h2>
+
+
+<div class="grid">
+
+    <div class="card">
+        <h3>Authentication</h3>
+        <p>
+            Amazon Cognito provides authentication for protected application access.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>IAM</h3>
+        <p>
+            AWS IAM permissions should follow the principle of least privilege.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Presigned URLs</h3>
+        <p>
+            Temporary presigned URLs can be used for controlled access to stored files.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>S3 Protection</h3>
+        <p>
+            S3 objects should not be exposed publicly unless there is a specific
+            application requirement.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>CORS</h3>
+        <p>
+            Production deployments should restrict CORS to the application's
+            trusted domain.
+        </p>
+    </div>
+
+    <div class="card">
+        <h3>Credentials</h3>
+        <p>
+            AWS access keys, passwords, secrets and credentials must never be committed
+            to GitHub.
+        </p>
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- FUTURE -->
+
+<section id="future">
+    <h2>17. Future Enhancements</h2>
+
+
+<ul>
+    <li>Expand Cognito role management for citizens, officers and administrators.</li>
+    <li>Implement stronger role-based API authorization.</li>
+    <li>Add map-based visualization of complaint locations.</li>
+    <li>Add automatic escalation for unresolved complaints.</li>
+    <li>Build analytics dashboards for complaint trends.</li>
+    <li>Improve AI-based complaint classification.</li>
+    <li>Add resolution-time analytics.</li>
+    <li>Add geographic intelligence for identifying complaint hotspots.</li>
+    <li>Introduce automated operational monitoring and alerting.</li>
+</ul>
+
+
+</section>
+
+<!-- LINKS -->
+
+<section id="links">
+    <h2>18. Project Links</h2>
+
+
+<h3>Live Application</h3>
+
+<div class="url-box">
+    <a href="https://dp97potsl28ja.cloudfront.net/"
+       target="_blank">
+        https://dp97potsl28ja.cloudfront.net/
+    </a>
+</div>
+
+<h3>GitHub Repository</h3>
+
+<div class="url-box">
+    <a href="https://github.com/Quazi-Yaman/smart-city-complaint-management"
+       target="_blank">
+        https://github.com/Quazi-Yaman/smart-city-complaint-management
+    </a>
+</div>
+
+<h3>Architecture</h3>
+
+<div class="url-box">
+    <a href="https://github.com/Quazi-Yaman/smart-city-complaint-management/tree/main/architecture"
+       target="_blank">
+        GitHub Architecture Folder
+    </a>
+</div>
+
+<h3>Backend Source Code</h3>
+
+<div class="url-box">
+    <a href="https://github.com/Quazi-Yaman/smart-city-complaint-management/tree/main/backend"
+       target="_blank">
+        GitHub Backend Folder
+    </a>
+</div>
+
+<h3>Frontend Source Code</h3>
+
+<div class="url-box">
+    <a href="https://github.com/Quazi-Yaman/smart-city-complaint-management/tree/main/frontend"
+       target="_blank">
+        GitHub Frontend Folder
+    </a>
+</div>
+
+<h3>Screenshots</h3>
+
+<div class="url-box">
+    <a href="https://github.com/Quazi-Yaman/smart-city-complaint-management/tree/main/screenshots"
+       target="_blank">
+        GitHub Screenshots Folder
+    </a>
+</div>
+
+<h3>API Gateway</h3>
+
+<div class="url-box">
+    https://7rbz9pjaw8.execute-api.ap-south-1.amazonaws.com
+</div>
+
+<p>
+    API Gateway API ID:
+    <code>7rbz9pjaw8</code>
+</p>
+
+<p>
+    AWS Region:
+    <code>ap-south-1</code>
+</p>
+
+
+</section>
+
+<!-- CONCLUSION -->
+
+<section id="conclusion">
+    <h2>19. Conclusion</h2>
+
+
+<p>
+    The Smart City Complaint Management System demonstrates how AWS serverless
+    services can be combined with artificial intelligence to create a practical
+    cloud-based civic application.
+</p>
+
+<p>
+    The system integrates Amazon S3, CloudFront, Cognito, API Gateway, Lambda,
+    DynamoDB, Rekognition, Polly and SNS into a complete end-to-end workflow.
+</p>
+
+<p>
+    The project demonstrates practical experience in serverless architecture,
+    REST API development, NoSQL data storage, image processing, AI integration,
+    authentication, cloud storage, notifications and frontend deployment.
+</p>
+
+<div class="success">
+    <strong>Key takeaway:</strong>
+    The project is not simply a static website. It demonstrates an
+    end-to-end AWS serverless architecture where a user action triggers
+    multiple managed cloud services to process, store, analyze and communicate
+    complaint information.
+</div>
+
+
+</section>
+<button class="pdf-button" onclick="window.print()">
+    📄 Save Documentation as PDF
+</button>
+<footer>
+    <strong>Smart City Complaint Management System</strong><br>
+    AWS Serverless • AI • Cloud Computing • Python • REST API<br><br>
+    Built and documented by Yamania Quazi
+</footer>
+
+</main>
+
+</body>
+
+</html>
