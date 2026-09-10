@@ -562,11 +562,11 @@ v          v           v
 Amazon S3   DynamoDB    Rekognition
 Images      Complaints  Image Analysis
 |
-+----------------------+
-|          |
-v          v
-Amazon Polly   Amazon SNS
-Audio          Notifications
++----------------------------+
+|              |             |
+v              v             v
+Amazon Polly   Amazon       Amazon SNS
+Audio          EventBridge  Notifications
 
 Administrator
 |
@@ -649,6 +649,10 @@ Lambda → DynamoDB </div>
     <div class="card service">
         <strong>Amazon SNS</strong>
         Sends complaint notifications.
+    </div>
+    <div class="card service">
+        <strong>Amazon EventBridge</strong>
+        Sends daily updates notifications.
     </div>
 
 </div>
